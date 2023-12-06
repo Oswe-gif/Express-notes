@@ -1,6 +1,7 @@
-##¿Como correr la API?
-*En primer lugar, debe de instalar las dependecias del packaga.json mediante el comando "npm install"
-*Package.json:
+## ¿Como correr la API?
+* En primer lugar, debe de instalar las dependecias del packaga.json mediante el comando "npm install"
+* Package.json:
+
 ```
 {
   "name": "node-js-ejemplos",
