@@ -1,6 +1,18 @@
-const express = require('express')
-const app = express()
-app.use(express.json())
+const express = require('express');
+const cors = require('cors');
+const app = express();
+app.use(express.json()) //usamos el use para usar los middleware, y deben de ser en orden--> y estos se ejecutan antes de cada solictud ->funciones que se ejecutan antes o despues de una petición
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+app.use(requestLogger)
+
+
+app.use(cors())
 
 let notes =[
     {
@@ -22,6 +34,7 @@ let notes =[
       important: true
     }
   ]
+
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!!</h1>')
@@ -76,7 +89,14 @@ app.delete('/api/notes/:id', (request, response) => {
     response.json(note)
   })
 
-const PORT = 3001
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+    
+app.use(unknownEndpoint)//aqui usamos otro middleware y este solo se ejecuta si no entra a niguna de nuestras rutas 
+  
+
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
