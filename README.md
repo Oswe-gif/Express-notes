@@ -25,3 +25,8 @@
 ```
 
 * Puedes iniciar la API mediante el comando 'node index.js' o 'npm start'. No obstante, se aconseja emplear 'npm run dev', ya que este utiliza nodemon para reiniciar automáticamente el servidor (ver el package.json).
+
+## Aplicación desplegada:
+* Frontend: https://render-test-59zj.onrender.com/
+* API: https://render-test-59zj.onrender.com/api/notes
+
