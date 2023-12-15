@@ -90,7 +90,7 @@ app.get('/api/notes/:id', (request, response, next) => {
     return maxId + 1
   }
   
-  app.post('/api/notes', (request, response) => {
+  app.post('/api/notes', (request, response, next) => {
     const body = request.body
   
     if (body.content === undefined) {
@@ -104,8 +104,9 @@ app.get('/api/notes/:id', (request, response, next) => {
     })
   
     note.save().then(savedNote => {
-      response.json(savedNote)
-    })
+      response.json(savedNote.toJSON())
+    }).catch(error => next(error));
+    console.log('aqui llego')//continua con el flujo dentro de esta función porque atrapa el error, lo soluciona y continua. Incluso si no hay error ps continua aqui.
   })
 
   app.put('/api/notes/:id', (request, response, next) => {
@@ -127,11 +128,15 @@ app.get('/api/notes/:id', (request, response, next) => {
 
 
 const errorHandler = (error, request, response, next) => {//esta función de error nunca se usa a no ser que se llame con next(argumento), o sea los next() sin argumentos no llaman a esta, o no sigue el flujo normal 
-  console.error(error.message)
+  console.error(error.message);
+  console.log(error.name);
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' }) //ponemos return para que no siga con el flujo hacia abajo dentro de esta función.
   } 
+  else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })//ponemos return para que no siga con el flujo hacia abajo dentro de esta función.
+  }
 
   next(error)//si no es un error llamaod "CastError", ps pasa el error al controlador de errores Express predeterminado
 }
