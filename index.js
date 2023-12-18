@@ -1,4 +1,15 @@
-require('dotenv').config()
+const app = require('./app') // la aplicación Express real
+const http = require('http')
+const config = require('./utils/config')
+const logger = require('./utils/logger')
+
+const server = http.createServer(app)
+
+server.listen(config.PORT, () => {
+  logger.info(`Server running on port ${config.PORT}`)
+})
+
+/*require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -75,7 +86,7 @@ app.get('/api/notes/:id', (request, response, next) => {
     notes = notes.filter(note => note.id !== id)
     response.status(204).end() //el "end" al final es para no devolver datos
   })*/
-  app.delete('/api/notes/:id', (request, response, next) => {
+  /*app.delete('/api/notes/:id', (request, response, next) => {
     Note.findByIdAndDelete(request.params.id)
       .then(result => {
         response.status(204).end()//el end al final es para terminar una petición porque si no lo coloco se queda cargando y no envia nada. Sin embargo, el send() y json() envian los datos de una y termina ese request o sea no se queda cargando.
@@ -156,4 +167,4 @@ app.use(unknownEndpoint)
 const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
-})
+})*/
