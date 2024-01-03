@@ -1,10 +1,12 @@
 const notesRouter = require('express').Router()
 const Note = require('../models/note')
 
-notesRouter.get('/', (request, response) => {
-  Note.find({}).then(notes => {
+notesRouter.get('/',async (request, response) => {
+  /*Note.find({}).then(notes => {
     response.json(notes)
-  })
+  })*/
+  const notes = await Note.find({})
+  response.json(notes)
 })
 
 notesRouter.get('/:id', (request, response, next) => {
@@ -19,7 +21,7 @@ notesRouter.get('/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-notesRouter.post('/', (request, response, next) => {
+/*notesRouter.post('/', (request, response, next) => {
   const body = request.body
 
   const note = new Note({
@@ -33,7 +35,32 @@ notesRouter.post('/', (request, response, next) => {
       response.json(savedNote)
     })
     .catch(error => next(error))
+})*/
+
+
+
+notesRouter.post('/', async (request, response, next) => {
+  const body = request.body
+
+  const note = new Note({
+    content: body.content,
+    important: body.important || false,
+    date: new Date(),
+  })
+  /*try{
+    const savedNote = await note.save()
+    response.json(savedNote)
+  }
+  catch(error){
+    next(error);
+  }*/
+  
+  //gracias a la biblioteca  express-async-errors  ya el try-catch se hace por defecto.
+  const savedNote = await note.save()
+  response.json(savedNote)
+
 })
+
 
 notesRouter.delete('/:id', (request, response, next) => {
   Note.findByIdAndDelete(request.params.id)
@@ -42,6 +69,12 @@ notesRouter.delete('/:id', (request, response, next) => {
     })
     .catch(error => next(error))
 })
+
+/*notesRouter.delete('/:id', async(request, response, next)=>{
+  Note.findByIdAndDelete(request.params.id)
+  response.status(204).end()
+  //gracias a la biblioteca  express-async-errors  ya el try-catch se hace por defecto.
+})*/
 
 notesRouter.put('/:id', (request, response, next) => {
   const body = request.body

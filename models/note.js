@@ -20,7 +20,7 @@ noteSchema.set('toJSON', {
     delete returnedObject._id
     delete returnedObject.__v
   }
-})//esto es para borrar campos en el schema, pero no es del todo necesario, ps borramos la versión de cada objeto de traemos.
+})//Cuando un objeto es devuelvo con el esquema de "note", borra  los dos campos ._id y ._v para ser mostrado al usuario y agregar el id con formato de string de manera automatica. Sin embargo, puedo llamar la función toJson() tambien de manual para hacer el proceso -->O sea porque la transformación ocurre cuando llamo al metodo .send() o .json() para enviar los datos al usuario, pero si quiero mostrar algo en consola ps deberia usar el .toJson() para ver como se transformaria porque aun este metodo no se ha aplicado, este metodo se aplica de manera atomcatica apenas se envie los datos con el .SEND() o .JSON(), se resto toca de manera manual.
 
 
 module.exports = mongoose.model('Note', noteSchema)
